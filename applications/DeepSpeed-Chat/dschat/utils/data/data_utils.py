@@ -186,6 +186,8 @@ def create_dataset_split(current_dataset, raw_dataset, train_phase, tokenizer,
         print(
             f'Creating dataset {raw_dataset.dataset_name_clean} for {train_phase=} size={len(chosen_dataset)}'
         )
+        example = tokenizer.decode(chosen_dataset[0]["input_ids"], skip_special_tokens=False)
+        print(f"\n######## Data example ########\n{example}\n##############################\n")
 
     elif train_phase == 2:
         for i, tmp_data in enumerate(current_dataset):

@@ -73,15 +73,15 @@ class ExponentialMovingAverage:
 
 
 def get_tokenizer(model_name_or_path, fast_tokenizer=True):
-    if "llama" in model_name_or_path:
+    if "llama" in model_name_or_path and not "Llama-3" in model_name_or_path:
         from transformers.models.llama import LlamaTokenizer
         tokenizer = LlamaTokenizer.from_pretrained(
             model_name_or_path, fast_tokenizer=fast_tokenizer)
         if tokenizer.pad_token is None:
-            # assert tokenizer.eos_token is not None
-            # tokenizer.add_special_tokens({'pad_token': tokenizer.eos_token})
-            tokenizer.add_special_tokens({'pad_token': '[PAD]'})
-            tokenizer.padding_side = 'right'
+            assert tokenizer.eos_token is not None
+            tokenizer.add_special_tokens({'pad_token': tokenizer.eos_token})
+            # tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+            # tokenizer.padding_side = 'right'
     else:
         tokenizer = AutoTokenizer.from_pretrained(
             model_name_or_path, fast_tokenizer=fast_tokenizer)

@@ -59,6 +59,10 @@ def parse_args():
         'Where to store the data-related files such as shuffle index. This needs to be on a local storage of a node (not on a shared storage)'
     )
     parser.add_argument(
+        "--reload",
+        action='store_true',
+        help="Whether to reload dataset")
+    parser.add_argument(
         "--model_name_or_path",
         type=str,
         help=
@@ -192,6 +196,18 @@ def parse_args():
         "--add_eot_token",
         action='store_true',
         help="Add <|endoftext|> as additional special token to tokenizer")
+    parser.add_argument(
+        "--eot_token",
+        type=str,
+        default="<|endoftext|>",
+        help="Add <|endoftext|> as additional special token to tokenizer",
+    )
+    parser.add_argument(
+        "--end_of_conversation_token",
+        type=str,
+        default="<|endoftext|>",
+        help="Add <|endoftext|> as additional special token to tokenizer",
+    )
     ## Print loss
     parser.add_argument('--print_loss',
                         action='store_true',
@@ -234,8 +250,7 @@ def main():
     torch.distributed.barrier()
 
     # load_hf_tokenizer will get the correct tokenizer and set padding tokens based on the model family
-    args.end_of_conversation_token = "<|endoftext|>"
-    additional_special_tokens = args.end_of_conversation_token if args.add_eot_token else None
+    additional_special_tokens = args.eot_token if args.add_eot_token else None
     tokenizer = load_hf_tokenizer(args.model_name_or_path,
                                   fast_tokenizer=True,
                                   add_special_tokens=additional_special_tokens)
@@ -270,7 +285,10 @@ def main():
         args.seed,
         tokenizer,
         args.max_seq_len,
-        sft_only_data_path=args.sft_only_data_path)
+        args.end_of_conversation_token,
+        sft_only_data_path=args.sft_only_data_path,
+        reload=args.reload,
+    )
     # DataLoaders creation:
     if args.local_rank == -1:
         train_sampler = RandomSampler(train_dataset)
