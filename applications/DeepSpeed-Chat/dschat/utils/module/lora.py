@@ -101,6 +101,7 @@ def convert_linear_layer_to_lora(model,
             module.weight, lora_dim, lora_scaling, lora_droppout,
             module.bias).to(module.weight.device).to(module.weight.dtype)
         recursive_setattr(model, name, tmp)
+        del model
     return model
 
 

@@ -14,7 +14,7 @@ fi
 mkdir -p $OUTPUT
 
 deepspeed main.py \
-   --data_path Dahoas/rm-static \
+   --data_path local/jsonfile \
    --data_split 2,4,4 \
    --model_name_or_path /home/xingfu/data/Meta-Llama-3-8B \
    --add_eot_token \

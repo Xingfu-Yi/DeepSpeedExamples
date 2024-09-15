@@ -98,7 +98,7 @@ with gr.Blocks(fill_height=True) as demo:
     )
     with gr.Row():
         show_raw = gr.Checkbox(label="Show Raw History", value=False)
-        clear_btn = gr.ClearButton([system_prompt, text_raw, chatbot, chat_input])
+        clear_btn = gr.ClearButton([text_raw, chatbot, chat_input])
 
     chat_msg = chat_input.submit(
         add_message,
